@@ -26,7 +26,7 @@ class _PageHomeState extends State<PageHome> {
                 ],
               );
             } else {
-              return Center(child: Text('加载中...'),)
+              return Center(child: Text('加载中...'));
             }
           },
         )
