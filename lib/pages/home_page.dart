@@ -29,6 +29,13 @@ class _PageHomeState extends State<PageHome> with AutomaticKeepAliveClientMixin{
               String leaderImage = data['data']['shopInfo']['leaderImage'];
               String leaderPhone = data['data']['shopInfo']['leaderPhone'];
               List<Map> recommendList = (data['data']['recommend'] as List).cast();
+              String floor1Title = data['data']['floor1Pic']['PICTURE_ADDRESS'];
+              String floor2Title = data['data']['floor2Pic']['PICTURE_ADDRESS'];
+              String floor3Title = data['data']['floor3Pic']['PICTURE_ADDRESS'];
+              List<Map> floorData1 = (data['data']['floor1'] as List).cast();
+              List<Map> floorData2 = (data['data']['floor2'] as List).cast();
+              List<Map> floorData3 = (data['data']['floor3'] as List).cast();
+
               if(navigatorList.length > 10){
                 navigatorList.removeRange(10, navigatorList.length);
               }
@@ -39,7 +46,13 @@ class _PageHomeState extends State<PageHome> with AutomaticKeepAliveClientMixin{
                     TopNavigator(navigatorList: navigatorList),
                     AdBanner(adPictureUrl: adPictureUrl),
                     LeaderPhone(leaderImage: leaderImage,leaderPhone: leaderPhone),
-                    Recommend(recommendList:recommendList)
+                    Recommend(recommendList:recommendList),
+                    FloorTitle(picAdress: floor1Title),
+                    FloorGoods(floorGoodsList:floorData1),
+                    FloorTitle(picAdress: floor2Title),
+                    FloorGoods(floorGoodsList:floorData2),
+                    FloorTitle(picAdress: floor3Title),
+                    FloorGoods(floorGoodsList:floorData3),
                   ],
                 ),
               );
@@ -241,6 +254,73 @@ class Recommend extends StatelessWidget {
         children: <Widget>[
           _titleWidget(),
           _recommandListView()
+        ],
+      ),
+    );
+  }
+}
+
+// 分类区标题
+class FloorTitle extends StatelessWidget {
+  final String picAdress;
+  FloorTitle({Key key,this.picAdress}):super(key:key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
+      child: Image.network(picAdress),
+    );
+  }
+}
+
+// 分类区商品
+class FloorGoods extends StatelessWidget {
+  final List<Map> floorGoodsList;
+  FloorGoods({Key key, this.floorGoodsList}):super(key:key);
+
+  Widget _firstRow(){
+    return Row(
+      children: <Widget>[
+        _goodsItem(floorGoodsList[0]),
+        Column(
+          children: <Widget>[
+          _goodsItem(floorGoodsList[1]),
+          _goodsItem(floorGoodsList[2]),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _otherRow(){
+    return Row(
+      children: <Widget>[
+        _goodsItem(floorGoodsList[3]),
+        _goodsItem(floorGoodsList[4])
+      ],
+    );
+  }
+
+  Widget _goodsItem(Map goods){
+    return Container(
+      width: ScreenUtil().setWidth(375),
+      child: InkWell(
+        onTap: (){
+
+        },
+        child: Image.network(goods['image']),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          _firstRow(),
+          _otherRow()
         ],
       ),
     );

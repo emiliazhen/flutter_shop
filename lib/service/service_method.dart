@@ -17,6 +17,6 @@ Future getHomePageContent() async {
       throw Exception('后端接口出现异常，请检测代码和服务器情况');
     }
   }catch(e){
-    return print('Error:=======>${e}');
+    return print('Error:=======>$e');
   }
 }
