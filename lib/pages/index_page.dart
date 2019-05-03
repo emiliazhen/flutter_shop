@@ -59,7 +59,10 @@ class _IndexPageState extends State<IndexPage> {
           });
         },
       ),
-      body:pages[currentIndex]
+      body: IndexedStack(
+        index: currentIndex,
+        children: pages,
+      )
     );
   }
 }
