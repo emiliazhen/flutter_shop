@@ -3,14 +3,16 @@ import 'dart:async';
 import 'dart:io';
 import '../config/service_url.dart';
 
-Future getHomePageContent() async {
+Future request(String url, [dynamic params]) async {
   try{
-    print('开始获取首页数据...');
     Response res;
     Dio dio = new Dio();
     dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
-    var formData = {'lon':'115.02932','lat':'35.76189'};
-    res = await dio.post(servicePath['homePageContext'],data:formData);
+    if(params == null){
+      res = await dio.post(servicePath[url]);
+    }else{
+      res = await dio.post(servicePath[url],data:params);
+    }
     if(res.statusCode == 200){
       return res.data;
     }else{

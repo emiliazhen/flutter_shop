@@ -11,15 +11,106 @@ class PageHome extends StatefulWidget {
 }
 
 class _PageHomeState extends State<PageHome> with AutomaticKeepAliveClientMixin{
+  int page = 1;
+  List<Map> hotGoodsList = [];
+
+  void _getHotGoodsList(){
+    request('homePageBelowConten',{'page': page}).then((res){
+      var data = json.decode(res.toString());
+      List<Map> neWGoodsList = (data['data'] as List).cast();
+      setState(() {
+       hotGoodsList.addAll(neWGoodsList);
+       page++;
+      });
+    });
+  }
+
+  Widget _hotGoodsTitle = Container(
+    margin: EdgeInsets.all(ScreenUtil().setWidth(10)),
+    padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+    alignment: Alignment.center,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      border: Border(
+        bottom: BorderSide(
+          width: ScreenUtil().setWidth(0.5),
+          color: Colors.black12
+        )
+      )
+    ),
+    child: Text('火爆专区'),
+  );
+
+  Widget _hotGoodsShow(){
+    if(hotGoodsList.length > 0){
+      return Wrap(
+        spacing: 3,
+        children: hotGoodsList.map((item){
+          return InkWell(
+            onTap: (){},
+            child: Container(
+              width: ScreenUtil().setWidth(369),
+              padding: EdgeInsets.all(ScreenUtil().setWidth(5)),
+              margin: EdgeInsets.only(
+                bottom: ScreenUtil().setWidth(3)
+              ),
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Image.network(
+                    item['image'],
+                    width:ScreenUtil().setWidth(359),
+                  ),
+                  Text(
+                    item['name'],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.pink,
+                      fontSize:ScreenUtil().setSp(26),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('￥${item['mallPrice']}'),
+                      Text(
+                        '￥${item['price']}',
+                        style: TextStyle(
+                          color: Colors.black26,
+                          decoration: TextDecoration.lineThrough
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    }else{
+      return Text('暂无数据');
+    }
+  }
+
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getHotGoodsList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
         appBar: AppBar(title: Text('LifeShop+'),),
         body: FutureBuilder(
-          future: getHomePageContent(),
+          future: request('homePageContext',{'lon':'115.02932','lat':'35.76189'}),
           builder: (context,snapshot){
             if(snapshot.hasData){
               var data = json.decode(snapshot.data.toString());
@@ -53,6 +144,8 @@ class _PageHomeState extends State<PageHome> with AutomaticKeepAliveClientMixin{
                     FloorGoods(floorGoodsList:floorData2),
                     FloorTitle(picAdress: floor3Title),
                     FloorGoods(floorGoodsList:floorData3),
+                    _hotGoodsTitle,
+                    _hotGoodsShow()
                   ],
                 ),
               );
