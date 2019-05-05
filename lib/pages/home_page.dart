@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import '../service/service_method.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+
+import '../service/service_method.dart';
 
 class PageHome extends StatefulWidget {
   @override
@@ -13,17 +15,7 @@ class PageHome extends StatefulWidget {
 class _PageHomeState extends State<PageHome> with AutomaticKeepAliveClientMixin{
   int page = 1;
   List<Map> hotGoodsList = [];
-
-  void _getHotGoodsList(){
-    request('homePageBelowConten',{'page': page}).then((res){
-      var data = json.decode(res.toString());
-      List<Map> neWGoodsList = (data['data'] as List).cast();
-      setState(() {
-       hotGoodsList.addAll(neWGoodsList);
-       page++;
-      });
-    });
-  }
+  GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
 
   Widget _hotGoodsTitle = Container(
     margin: EdgeInsets.all(ScreenUtil().setWidth(10)),
@@ -101,7 +93,6 @@ class _PageHomeState extends State<PageHome> with AutomaticKeepAliveClientMixin{
   @override
   void initState() {
     super.initState();
-    _getHotGoodsList();
   }
 
   @override
@@ -130,8 +121,28 @@ class _PageHomeState extends State<PageHome> with AutomaticKeepAliveClientMixin{
               if(navigatorList.length > 10){
                 navigatorList.removeRange(10, navigatorList.length);
               }
-              return SingleChildScrollView(
-                child: Column(
+              return EasyRefresh(
+                loadMore: () async{
+                  await request('homePageBelowConten',{'page': page}).then((res){
+                    var data = json.decode(res.toString());
+                    List<Map> neWGoodsList = (data['data'] as List).cast();
+                    setState(() {
+                      hotGoodsList.addAll(neWGoodsList);
+                      page++;
+                    });
+                  });
+                },
+                refreshFooter: ClassicsFooter(
+                  key: _footerKey,
+                  bgColor: Colors.pink,
+                  textColor: Colors.white,
+                  moreInfoColor: Colors.white,
+                  showMore: true,
+                  noMoreText: '',
+                  moreInfo: '加载中...',
+                  loadReadyText: '上拉加载',
+                ),
+                child: ListView(
                   children: <Widget>[
                     SwiperDiy(swiperDataList: swiperDataList),
                     TopNavigator(navigatorList: navigatorList),
