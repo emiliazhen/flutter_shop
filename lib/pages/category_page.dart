@@ -20,7 +20,11 @@ class _PageCategoryState extends State<PageCategory> {
       body: Row(
         children: <Widget>[
           LeftCategoryNav(),
-          Text('1')
+          Column(
+            children: <Widget>[
+              RightCategoryNav()
+            ],
+          )
         ],
       ),
     );
@@ -86,6 +90,62 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
         itemBuilder: (context,index){
           return _leftNavInkWell(index);
         },
+      ),
+    );
+  }
+}
+
+class RightCategoryNav extends StatefulWidget {
+  @override
+  _RightCategoryNavState createState() => _RightCategoryNavState();
+}
+
+class _RightCategoryNavState extends State<RightCategoryNav> {
+  List list = ['白酒','红酒','黄酒','清酒','葡萄酒','朗姆酒','保健酒'];
+
+  Widget _rightNavInkWell(index){
+    return InkWell(
+      onTap: (){
+
+      },
+      child: Container(
+        alignment: Alignment.center,
+        height: ScreenUtil().setWidth(50),
+        child: Text(list[index]),
+        padding: EdgeInsets.only(
+          left: ScreenUtil().setWidth(20),
+          right: ScreenUtil().setWidth(20),
+        ),
+        decoration: BoxDecoration(
+          border: Border(
+            right: BorderSide(
+              width: ScreenUtil().setWidth(1),
+              color: Colors.black12
+            )
+          )
+        ),
+      ),
+    );
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: ScreenUtil().setWidth(570),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            width: ScreenUtil().setWidth(1),
+            color: Colors.black12
+          )
+        )
+      ),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context,index){
+          return _rightNavInkWell(index);
+        },
+        itemCount: list.length,
       ),
     );
   }
