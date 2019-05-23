@@ -20,17 +20,18 @@ class _PageCategoryState extends State<PageCategory> {
       body: Row(
         children: <Widget>[
           LeftCategoryNav(),
-          Column(
-            children: <Widget>[
-              RightCategoryNav()
-            ],
-          )
+          // Column(
+          //   children: <Widget>[
+          //     RightCategoryNav(),
+          //   ],
+          // )
         ],
       ),
     );
   }
 }
 
+// 左侧导航菜单
 class LeftCategoryNav extends StatefulWidget {
   @override
   _LeftCategoryNavState createState() => _LeftCategoryNavState();
@@ -42,6 +43,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
   void _getCategory() async {
     await request('getCategory').then((res){
       var data = json.decode(res.toString());
+       print(data);
       CategoryModel categoryList = CategoryModel.fromJson(data);
       setState(() {
        list = categoryList.data;
@@ -52,18 +54,21 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
   Widget _leftNavInkWell(index){
     return InkWell(
       child: Container(
-        alignment: Alignment.center,
-        height: ScreenUtil().setWidth(100),
+        alignment: Alignment.centerLeft,
+        height: ScreenUtil().setHeight(100),
+        padding: EdgeInsets.only(
+          left: ScreenUtil().setWidth(20),
+        ),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border(
-            bottom: BorderSide(width: ScreenUtil().setWidth(1),color: Colors.black12)
+            bottom: BorderSide(width: ScreenUtil().setHeight(1),color: Colors.black12)
           ),
         ),
         child: Text(
           list[index].mallCategoryName,
           style: TextStyle(
-            fontSize: ScreenUtil().setSp(26)
+            fontSize: ScreenUtil().setSp(28)
           ),
         ),
       ),
