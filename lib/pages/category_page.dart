@@ -20,11 +20,11 @@ class _PageCategoryState extends State<PageCategory> {
       body: Row(
         children: <Widget>[
           LeftCategoryNav(),
-          // Column(
-          //   children: <Widget>[
-          //     RightCategoryNav(),
-          //   ],
-          // )
+          Column(
+            children: <Widget>[
+              RightCategoryNav(),
+            ],
+          )
         ],
       ),
     );
@@ -43,7 +43,6 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
   void _getCategory() async {
     await request('getCategory').then((res){
       var data = json.decode(res.toString());
-       print(data);
       CategoryModel categoryList = CategoryModel.fromJson(data);
       setState(() {
        list = categoryList.data;
@@ -118,16 +117,11 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
         height: ScreenUtil().setWidth(50),
         child: Text(list[index]),
         padding: EdgeInsets.only(
-          left: ScreenUtil().setWidth(20),
-          right: ScreenUtil().setWidth(20),
+          left: ScreenUtil().setWidth(40),
+          right: ScreenUtil().setWidth(40),
         ),
         decoration: BoxDecoration(
-          border: Border(
-            right: BorderSide(
-              width: ScreenUtil().setWidth(1),
-              color: Colors.black12
-            )
-          )
+          color:Colors.white
         ),
       ),
     );
@@ -136,11 +130,12 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
   Widget build(BuildContext context) {
     return Container(
       width: ScreenUtil().setWidth(570),
+      height: ScreenUtil().setHeight(80),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
           bottom: BorderSide(
-            width: ScreenUtil().setWidth(1),
+            width: ScreenUtil().setHeight(1),
             color: Colors.black12
           )
         )
