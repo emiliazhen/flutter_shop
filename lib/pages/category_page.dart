@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provide/provide.dart';
 
 import '../service/service_method.dart';
 import '../model/category.dart';
+import '../provide/child_category.dart';
 
 class PageCategory extends StatefulWidget {
   @override
@@ -39,6 +41,13 @@ class LeftCategoryNav extends StatefulWidget {
 
 class _LeftCategoryNavState extends State<LeftCategoryNav> {
   List list = [];
+  int listIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCategory();
+  }
 
   void _getCategory() async {
     await request('getCategory').then((res){
@@ -46,12 +55,20 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
       CategoryModel categoryList = CategoryModel.fromJson(data);
       setState(() {
        list = categoryList.data;
+       Provide.value<ChildCategory>(context).getChildCategory(list[0].bxMallSubDto);
       });
     });
   }
 
   Widget _leftNavInkWell(index){
     return InkWell(
+      onTap: (){
+        var childList = list[index].bxMallSubDto;
+        Provide.value<ChildCategory>(context).getChildCategory(childList);
+        setState(() {
+          listIndex = index;
+        });
+      },
       child: Container(
         alignment: Alignment.centerLeft,
         height: ScreenUtil().setHeight(100),
@@ -59,7 +76,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
           left: ScreenUtil().setWidth(20),
         ),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: listIndex == index ? Colors.pinkAccent : Colors.white,
           border: Border(
             bottom: BorderSide(width: ScreenUtil().setHeight(1),color: Colors.black12)
           ),
@@ -72,12 +89,6 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getCategory();
   }
 
   @override
@@ -105,9 +116,7 @@ class RightCategoryNav extends StatefulWidget {
 }
 
 class _RightCategoryNavState extends State<RightCategoryNav> {
-  List list = ['白酒','红酒','黄酒','清酒','葡萄酒','朗姆酒','保健酒'];
-
-  Widget _rightNavInkWell(index){
+  Widget _rightNavInkWell(BxMallSubDto item){
     return InkWell(
       onTap: (){
 
@@ -115,7 +124,7 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
       child: Container(
         alignment: Alignment.center,
         height: ScreenUtil().setWidth(50),
-        child: Text(list[index]),
+        child: Text(item.mallSubName),
         padding: EdgeInsets.only(
           left: ScreenUtil().setWidth(40),
           right: ScreenUtil().setWidth(40),
@@ -128,25 +137,29 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
   }
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: ScreenUtil().setWidth(570),
-      height: ScreenUtil().setHeight(80),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(
-            width: ScreenUtil().setHeight(1),
-            color: Colors.black12
-          )
-        )
-      ),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context,index){
-          return _rightNavInkWell(index);
-        },
-        itemCount: list.length,
-      ),
+    return Provide<ChildCategory>(
+      builder: (context,child,childCategory){
+        return Container(
+          width: ScreenUtil().setWidth(570),
+          height: ScreenUtil().setHeight(80),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              bottom: BorderSide(
+                width: ScreenUtil().setHeight(1),
+                color: Colors.black12
+              )
+            )
+          ),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context,index){
+              return _rightNavInkWell(childCategory.childCategoryList[index]);
+            },
+            itemCount: childCategory.childCategoryList.length,
+          ),
+        );
+      },
     );
   }
 }

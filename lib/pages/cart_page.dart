@@ -5,7 +5,7 @@ class PageCart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('购物车'),
+        child: Text('购物车')
       ),
     );
   }
