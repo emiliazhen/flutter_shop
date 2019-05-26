@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +7,7 @@ import 'package:provide/provide.dart';
 import '../service/service_method.dart';
 import '../model/category.dart';
 import '../provide/child_category.dart';
+import '../model/category_goods_list.dart';
 
 class PageCategory extends StatefulWidget {
   @override
@@ -25,6 +27,7 @@ class _PageCategoryState extends State<PageCategory> {
           Column(
             children: <Widget>[
               RightCategoryNav(),
+              CategoryGoodsList()
             ],
           )
         ],
@@ -55,8 +58,8 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
       CategoryModel categoryList = CategoryModel.fromJson(data);
       setState(() {
        list = categoryList.data;
-       Provide.value<ChildCategory>(context).getChildCategory(list[0].bxMallSubDto);
       });
+      Provide.value<ChildCategory>(context).getChildCategory(list[0].bxMallSubDto);
     });
   }
 
@@ -76,7 +79,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
           left: ScreenUtil().setWidth(20),
         ),
         decoration: BoxDecoration(
-          color: listIndex == index ? Colors.pinkAccent : Colors.white,
+          color: listIndex == index ? Color.fromRGBO(230, 230, 230, 1.0) : Colors.white,
           border: Border(
             bottom: BorderSide(width: ScreenUtil().setHeight(1),color: Colors.black12)
           ),
@@ -126,8 +129,8 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
         height: ScreenUtil().setWidth(50),
         child: Text(item.mallSubName),
         padding: EdgeInsets.only(
-          left: ScreenUtil().setWidth(40),
-          right: ScreenUtil().setWidth(40),
+          left: ScreenUtil().setWidth(20),
+          right: ScreenUtil().setWidth(20),
         ),
         decoration: BoxDecoration(
           color:Colors.white
@@ -160,6 +163,44 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
           ),
         );
       },
+    );
+  }
+}
+
+class CategoryGoodsList extends StatefulWidget {
+  @override
+  _CategoryGoodsListState createState() => _CategoryGoodsListState();
+}
+
+class _CategoryGoodsListState extends State<CategoryGoodsList> {
+  List list = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getGoodlist();
+  }
+
+  void _getGoodlist() async {
+    Map data = {
+      'categoryId': '4',
+      'categorySubId': '',
+      'page': 1
+    };
+    await request('getMallGoods', data).then((res) {
+      dynamic data = json.decode(res.toString());
+      CategoryGoodsListModel goodslist = CategoryGoodsListModel.fromJson(data);
+      setState(() {
+        list = goodslist.data;
+      });
+      print(list[0].goodsName);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text('商品列表'),
     );
   }
 }
