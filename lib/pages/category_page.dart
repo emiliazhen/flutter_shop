@@ -62,17 +62,17 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
       setState(() {
         list = categoryList.data;
       });
-      Provide.value<ChildCategory>(context).getChildCategory(list[0].bxMallSubDto);
+      Provide.value<ChildCategory>(context).getChildCategory(list[0].bxMallSubDto,list[0].mallCategoryId);
     });
   }
 
-  void _getGoodlist({String categoryId}) async {
+  void _getGoodlist({String categoryId}) {
     Map data = {
       'categoryId': categoryId == null ? '4' : categoryId,
       'categorySubId': '',
       'page': 1
     };
-    await request('getMallGoods', data).then((res) {
+    request('getMallGoods', data).then((res) {
       dynamic data = json.decode(res.toString());
       CategoryGoodsListModel goodslist = CategoryGoodsListModel.fromJson(data);
       Provide.value<CategoryGoodsListProvide>(context).getGoodsList(goodslist.data);
@@ -87,7 +87,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
         });
         var childList = list[index].bxMallSubDto;
         var categoryId = list[index].mallCategoryId;
-        Provide.value<ChildCategory>(context).getChildCategory(childList);
+        Provide.value<ChildCategory>(context).getChildCategory(childList,categoryId);
         _getGoodlist(categoryId: categoryId);
       },
       child: Container(
@@ -137,15 +137,34 @@ class RightCategoryNav extends StatefulWidget {
 }
 
 class _RightCategoryNavState extends State<RightCategoryNav> {
-  Widget _rightNavInkWell(BxMallSubDto item){
+  void _getGoodlist(String categorySubId) {
+    Map data = {
+      'categoryId': Provide.value<ChildCategory>(context).categoryId,
+      'categorySubId': categorySubId,
+      'page': 1
+    };
+    request('getMallGoods', data).then((res) {
+      dynamic data = json.decode(res.toString());
+      CategoryGoodsListModel goodslist = CategoryGoodsListModel.fromJson(data);
+      Provide.value<CategoryGoodsListProvide>(context).getGoodsList(goodslist.data);
+    });
+  }
+
+  Widget _rightNavInkWell(BxMallSubDto item,int index){
     return InkWell(
       onTap: (){
-
+        _getGoodlist(item.mallSubId);
+        Provide.value<ChildCategory>(context).changeChildCategoryIndex(index);
       },
       child: Container(
         alignment: Alignment.center,
         height: ScreenUtil().setWidth(50),
-        child: Text(item.mallSubName),
+        child: Text(
+          item.mallSubName,
+          style: TextStyle(
+            color: Provide.value<ChildCategory>(context).childCategoryIndex == index ? Colors.pink : Colors.black54
+          ),
+        ),
         padding: EdgeInsets.only(
           left: ScreenUtil().setWidth(20),
           right: ScreenUtil().setWidth(20),
@@ -175,7 +194,7 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemBuilder: (context,index){
-              return _rightNavInkWell(childCategory.childCategoryList[index]);
+              return _rightNavInkWell(childCategory.childCategoryList[index],index);
             },
             itemCount: childCategory.childCategoryList.length,
           ),
