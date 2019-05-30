@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import '../service/service_method.dart';
 import '../model/category.dart';
@@ -210,10 +211,31 @@ class CategoryGoodsList extends StatefulWidget {
 }
 
 class _CategoryGoodsListState extends State<CategoryGoodsList> {
+  var scrollController = new ScrollController();
+  GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
+
   @override
   void initState() {
     super.initState();
   }
+
+  void _getMorelist() {
+    Map data = {
+      'categoryId': Provide.value<ChildCategory>(context).categoryId,
+      'categorySubId': Provide.value<ChildCategory>(context).subId,
+      'page': Provide.value<ChildCategory>(context).page
+    };
+    request('getMallGoods', data).then((res) {
+      dynamic data = json.decode(res.toString());
+      CategoryGoodsListModel goodslist = CategoryGoodsListModel.fromJson(data);
+      if(goodslist.data == null){
+        Provide.value<ChildCategory>(context).changeNoMore();
+      }else{
+        Provide.value<CategoryGoodsListProvide>(context).addGoodsList(goodslist.data);
+      }
+    });
+  }
+
   // 商品
   Widget _categoryGoodsItem(List newList,index){
     return Container(
@@ -221,7 +243,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
       height: ScreenUtil().setHeight(200),
       child: InkWell(
         onTap: (){
-
+          print('被点了呢');
         },
         child: Container(
           decoration: BoxDecoration(
@@ -304,14 +326,38 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
   Widget build(BuildContext context) {
     return Provide<CategoryGoodsListProvide>(
       builder: (context,child,data){
+        try{
+          if(Provide.value<ChildCategory>(context).page == 1){
+            scrollController.jumpTo(0.0);
+          }
+        }catch (e){
+          print('进入页面第一次初始化: $e');
+        }
         if(data.goodsList.length > 0){
           return Container(
             width: ScreenUtil().setWidth(570),
-            child: ListView.builder(
-              itemCount: data.goodsList.length,
-              itemBuilder: (context,index){
-                return _categoryGoodsItem(data.goodsList,index);
+            child: EasyRefresh(
+              loadMore: (){
+                Provide.value<ChildCategory>(context).addPage();
+                _getMorelist();
               },
+              refreshFooter: ClassicsFooter(
+                key: _footerKey,
+                bgColor: Colors.pink,
+                textColor: Colors.white,
+                moreInfoColor: Colors.white,
+                showMore: true,
+                noMoreText: Provide.value<ChildCategory>(context).noMoreText,
+                moreInfo: '加载中...',
+                loadReadyText: '上拉加载',
+              ),
+              child: ListView.builder(
+                controller: scrollController,
+                itemCount: data.goodsList.length,
+                itemBuilder: (context,index){
+                  return _categoryGoodsItem(data.goodsList,index);
+                },
+              )
             ),
           );
         } else {

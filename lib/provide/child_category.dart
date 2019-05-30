@@ -7,8 +7,12 @@ class ChildCategory with ChangeNotifier {
   int childCategoryIndex = 0; // 子类索引
   String categoryId = '4'; // 大类ID
   String subId = ''; // 小类ID
+  int page = 1; // 列表页数
+  String noMoreText = ''; // 已到底部文字
 
   getChildCategory(List<BxMallSubDto> list,String id){
+    page = 1;
+    noMoreText = '';
     categoryId = id;
     childCategoryIndex = 0;
     subId = '';
@@ -23,6 +27,15 @@ class ChildCategory with ChangeNotifier {
   changeChildCategoryIndex(int index,String id){
     childCategoryIndex = index;
     subId = id;
+    notifyListeners();
+  }
+
+  addPage(){
+    page++;
+  }
+
+  changeNoMore(){
+    noMoreText = '我是有底线的';
     notifyListeners();
   }
 }
