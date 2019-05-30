@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:toast/toast.dart';
 
 import '../service/service_method.dart';
 import '../model/category.dart';
@@ -231,15 +231,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
       dynamic data = json.decode(res.toString());
       CategoryGoodsListModel goodslist = CategoryGoodsListModel.fromJson(data);
       if(goodslist.data == null){
-       Fluttertoast.showToast(
-          msg: "已经到底了",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.pink,
-          textColor: Colors.white,
-          fontSize: 16.0
-        );
+        Toast.show('已经到最底部了',context,duration:Toast.LENGTH_SHORT,gravity:Toast.CENTER);
         Provide.value<ChildCategory>(context).morePageEnd();
       }else{
         Provide.value<CategoryGoodsListProvide>(context).getMoreGoodsList(goodslist.data);
@@ -339,7 +331,11 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
       builder: (context,child,data){
         try{
           if(Provide.value<ChildCategory>(context).page == 1){
-            scrollController.jumpTo(0.0);
+            scrollController.animateTo(
+              0.0,
+              curve: Curves.easeOut,
+              duration: const Duration(milliseconds: 300),
+            );
           }
         }catch(e){
           print('>>>>>$e');
