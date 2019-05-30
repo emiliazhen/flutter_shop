@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../service/service_method.dart';
 import '../model/category.dart';
@@ -138,10 +139,10 @@ class RightCategoryNav extends StatefulWidget {
 }
 
 class _RightCategoryNavState extends State<RightCategoryNav> {
-  void _getGoodlist(String categorySubId) {
+  void _getGoodlist() {
     Map data = {
       'categoryId': Provide.value<ChildCategory>(context).categoryId,
-      'categorySubId': categorySubId,
+      'categorySubId': Provide.value<ChildCategory>(context).subId,
       'page': 1
     };
     request('getMallGoods', data).then((res) {
@@ -154,8 +155,8 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
   Widget _rightNavInkWell(BxMallSubDto item,int index){
     return InkWell(
       onTap: (){
-        _getGoodlist(item.mallSubId);
         Provide.value<ChildCategory>(context).changeChildCategoryIndex(index,item.mallSubId);
+        _getGoodlist();
       },
       child: Container(
         alignment: Alignment.center,
@@ -211,15 +212,16 @@ class CategoryGoodsList extends StatefulWidget {
 }
 
 class _CategoryGoodsListState extends State<CategoryGoodsList> {
-  var scrollController = new ScrollController();
   GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
+  var scrollController = new ScrollController();
 
   @override
   void initState() {
     super.initState();
   }
 
-  void _getMorelist() {
+  void _getMoreGoodlist() {
+    Provide.value<ChildCategory>(context).addPage();
     Map data = {
       'categoryId': Provide.value<ChildCategory>(context).categoryId,
       'categorySubId': Provide.value<ChildCategory>(context).subId,
@@ -229,9 +231,18 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
       dynamic data = json.decode(res.toString());
       CategoryGoodsListModel goodslist = CategoryGoodsListModel.fromJson(data);
       if(goodslist.data == null){
-        Provide.value<ChildCategory>(context).changeNoMore();
+       Fluttertoast.showToast(
+          msg: "已经到底了",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.pink,
+          textColor: Colors.white,
+          fontSize: 16.0
+        );
+        Provide.value<ChildCategory>(context).morePageEnd();
       }else{
-        Provide.value<CategoryGoodsListProvide>(context).addGoodsList(goodslist.data);
+        Provide.value<CategoryGoodsListProvide>(context).getMoreGoodsList(goodslist.data);
       }
     });
   }
@@ -330,16 +341,15 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
           if(Provide.value<ChildCategory>(context).page == 1){
             scrollController.jumpTo(0.0);
           }
-        }catch (e){
-          print('进入页面第一次初始化: $e');
+        }catch(e){
+          print('>>>>>$e');
         }
         if(data.goodsList.length > 0){
-          return Container(
+          return  Container(
             width: ScreenUtil().setWidth(570),
             child: EasyRefresh(
-              loadMore: (){
-                Provide.value<ChildCategory>(context).addPage();
-                _getMorelist();
+              loadMore: () {
+                _getMoreGoodlist();
               },
               refreshFooter: ClassicsFooter(
                 key: _footerKey,
@@ -347,7 +357,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                 textColor: Colors.white,
                 moreInfoColor: Colors.white,
                 showMore: true,
-                noMoreText: Provide.value<ChildCategory>(context).noMoreText,
+                noMoreText: '',
                 moreInfo: '加载中...',
                 loadReadyText: '上拉加载',
               ),
@@ -357,8 +367,8 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                 itemBuilder: (context,index){
                   return _categoryGoodsItem(data.goodsList,index);
                 },
-              )
-            ),
+              ),
+            )
           );
         } else {
           return Text('暂无数据');
