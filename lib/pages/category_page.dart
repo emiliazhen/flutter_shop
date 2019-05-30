@@ -10,6 +10,7 @@ import '../model/category.dart';
 import '../provide/child_category.dart';
 import '../model/category_goods_list.dart';
 import '../provide/category_goods_list.dart';
+import '../routers/staticize.dart';
 
 class PageCategory extends StatefulWidget {
   @override
@@ -246,7 +247,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
       height: ScreenUtil().setHeight(200),
       child: InkWell(
         onTap: (){
-          print('被点了呢');
+          Staticize.router.navigateTo(context, '/goodDetail?id=${newList[index].goodsId}');
         },
         child: Container(
           decoration: BoxDecoration(
