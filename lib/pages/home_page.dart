@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import '../service/service_method.dart';
+import '../routers/staticize.dart';
 
 class PageHome extends StatefulWidget {
   @override
@@ -16,6 +17,9 @@ class _PageHomeState extends State<PageHome> with AutomaticKeepAliveClientMixin{
   int page = 1;
   List<Map> hotGoodsList = [];
   GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
+  
+  @override
+  bool get wantKeepAlive => true;
 
   Widget _hotGoodsTitle = Container(
     margin: EdgeInsets.all(ScreenUtil().setWidth(10)),
@@ -39,7 +43,9 @@ class _PageHomeState extends State<PageHome> with AutomaticKeepAliveClientMixin{
         spacing: 3,
         children: hotGoodsList.map((item){
           return InkWell(
-            onTap: (){},
+            onTap: (){
+              Staticize.router.navigateTo(context, '/goodDetail?id=${item['goodsId']}');
+            },
             child: Container(
               width: ScreenUtil().setWidth(369),
               padding: EdgeInsets.all(ScreenUtil().setWidth(5)),
@@ -85,14 +91,6 @@ class _PageHomeState extends State<PageHome> with AutomaticKeepAliveClientMixin{
     }else{
       return Text('暂无数据');
     }
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -182,7 +180,12 @@ class SwiperDiy extends StatelessWidget {
       width: ScreenUtil().setWidth(750),
       child: Swiper(
         itemBuilder: (BuildContext context,int index){
-          return Image.network('${swiperDataList[index]['image']}',fit: BoxFit.fill);
+          return InkWell(
+            onTap: (){
+              Staticize.router.navigateTo(context, '/goodDetail?id=${swiperDataList[index]['goodsId']}');
+            },
+            child: Image.network('${swiperDataList[index]['image']}',fit: BoxFit.fill),
+          );
         },
         itemCount: swiperDataList.length,
         pagination: new SwiperPagination(),
@@ -299,9 +302,11 @@ class Recommend extends StatelessWidget {
   }
 
   // 推荐项
-  Widget _item(index){
+  Widget _item(index,BuildContext context){
     return InkWell(
-      onTap: (){},
+      onTap: (){
+        Staticize.router.navigateTo(context, '/goodDetail?id=${recommendList[index]['goodsId']}');
+      },
       child: Container(
         height: ScreenUtil().setHeight(330),
         width: ScreenUtil().setWidth(250),
@@ -344,7 +349,7 @@ class Recommend extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: recommendList.length,
         itemBuilder: (context,index){
-          return _item(index);
+          return _item(index,context);
         },
       ),
     );
@@ -384,35 +389,35 @@ class FloorGoods extends StatelessWidget {
   final List<Map> floorGoodsList;
   FloorGoods({Key key, this.floorGoodsList}):super(key:key);
 
-  Widget _firstRow(){
+  Widget _firstRow(BuildContext context){
     return Row(
       children: <Widget>[
-        _goodsItem(floorGoodsList[0]),
+        _goodsItem(floorGoodsList[0],context),
         Column(
           children: <Widget>[
-          _goodsItem(floorGoodsList[1]),
-          _goodsItem(floorGoodsList[2]),
+          _goodsItem(floorGoodsList[1],context),
+          _goodsItem(floorGoodsList[2],context),
           ],
         )
       ],
     );
   }
 
-  Widget _otherRow(){
+  Widget _otherRow(BuildContext context){
     return Row(
       children: <Widget>[
-        _goodsItem(floorGoodsList[3]),
-        _goodsItem(floorGoodsList[4])
+        _goodsItem(floorGoodsList[3],context),
+        _goodsItem(floorGoodsList[4],context)
       ],
     );
   }
 
-  Widget _goodsItem(Map goods){
+  Widget _goodsItem(Map goods,BuildContext context){
     return Container(
       width: ScreenUtil().setWidth(375),
       child: InkWell(
         onTap: (){
-
+          Staticize.router.navigateTo(context, '/goodDetail?id=${goods['goodsId']}');
         },
         child: Image.network(goods['image']),
       ),
@@ -424,8 +429,8 @@ class FloorGoods extends StatelessWidget {
     return Container(
       child: Column(
         children: <Widget>[
-          _firstRow(),
-          _otherRow()
+          _firstRow(context),
+          _otherRow(context)
         ],
       ),
     );
