@@ -32,12 +32,12 @@ class GoodsDetailContextTabBar extends StatelessWidget {
     return Container(
       width: ScreenUtil().setWidth(375),
       padding: EdgeInsets.all(
-        ScreenUtil().setWidth(10)
+        ScreenUtil().setWidth(20)
       ),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            width: ScreenUtil().setWidth(2),
+            width: ScreenUtil().setWidth(4),
             color: isLeft? Colors.pinkAccent : Colors.transparent
           )
         )
@@ -50,7 +50,7 @@ class GoodsDetailContextTabBar extends StatelessWidget {
           '详情',
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: isLeft? Colors.pinkAccent : Colors.black12,
+            color: isLeft? Colors.pinkAccent : Colors.black,
             fontSize: ScreenUtil().setSp(24)
           ),
         ),
@@ -62,12 +62,12 @@ class GoodsDetailContextTabBar extends StatelessWidget {
     return Container(
       width: ScreenUtil().setWidth(375),
       padding: EdgeInsets.all(
-        ScreenUtil().setWidth(10)
+        ScreenUtil().setWidth(20)
       ),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            width: ScreenUtil().setWidth(2),
+            width: ScreenUtil().setWidth(4),
             color: isLeft? Colors.transparent : Colors.pinkAccent
           )
         )
@@ -80,7 +80,7 @@ class GoodsDetailContextTabBar extends StatelessWidget {
           '评论',
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: isLeft? Colors.black12 : Colors.pinkAccent,
+            color: isLeft? Colors.black : Colors.pinkAccent,
             fontSize: ScreenUtil().setSp(24)
           ),
         ),

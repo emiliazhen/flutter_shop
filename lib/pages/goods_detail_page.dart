@@ -5,6 +5,7 @@ import '../provide/goods_detail_provide.dart';
 import './goods_detail/top_area.dart';
 import './goods_detail/explain_area.dart';
 import './goods_detail/context_tab_bar.dart';
+import './goods_detail/tab_context.dart';
 
 class GoodsDetailPage extends StatelessWidget {
   final String goodsId;
@@ -32,11 +33,12 @@ class GoodsDetailPage extends StatelessWidget {
         builder: (context,snapshot){
           if(snapshot.hasData){
             return Container(
-              child: Column(
+              child: ListView(
                 children: <Widget>[
                   GoodsDetailTopArea(),
                   GoodsDetailExplainArea(),
-                  GoodsDetailContextTabBar()
+                  GoodsDetailContextTabBar(),
+                  GoodsDetailTabContext()
                 ],
               ),
             );
