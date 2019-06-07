@@ -6,6 +6,7 @@ import './goods_detail/top_area.dart';
 import './goods_detail/explain_area.dart';
 import './goods_detail/context_tab_bar.dart';
 import './goods_detail/tab_context.dart';
+import './goods_detail/bottom_bar.dart';
 
 class GoodsDetailPage extends StatelessWidget {
   final String goodsId;
@@ -26,21 +27,28 @@ class GoodsDetailPage extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text('商品详情'),
+        title: Text(
+          '商品详情'
+        ),
       ),
       body: FutureBuilder(
         future: _getGoodsInfo(context),
         builder: (context,snapshot){
           if(snapshot.hasData){
-            return Container(
-              child: ListView(
-                children: <Widget>[
-                  GoodsDetailTopArea(),
-                  GoodsDetailExplainArea(),
-                  GoodsDetailContextTabBar(),
-                  GoodsDetailTabContext()
-                ],
-              ),
+            return Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView(
+                    children: <Widget>[
+                      GoodsDetailTopArea(),
+                      GoodsDetailExplainArea(),
+                      GoodsDetailContextTabBar(),
+                      GoodsDetailTabContext()
+                    ],
+                  ),
+                ),
+                GoodsDetailBottomBar()
+              ],
             );
           } else {
             return Text('正在加载..');
