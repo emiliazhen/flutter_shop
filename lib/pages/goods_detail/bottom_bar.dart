@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provide/provide.dart';
+
+import '../../provide/goods_detail_bottom_bar_provide.dart';
+import '../../provide/goods_detail_provide.dart';
 
 class GoodsDetailBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    dynamic goodsInfo = Provide.value<GoodsDetailProvide>(context).goodsDetailInfo.data.goodInfo;
     return Container(
       width: ScreenUtil().setWidth(750),
       height: ScreenUtil().setHeight(80),
@@ -21,6 +26,9 @@ class GoodsDetailBottomBar extends StatelessWidget {
             ),
           ),
           InkWell(
+            onTap: (){
+              Provide.value<GoodsDetailBottomBarProvide>(context).add(goodsInfo.goodsId, goodsInfo.goodsName,goodsInfo.presentPrice, goodsInfo.image1);
+            },
             child: Container(
               width: ScreenUtil().setWidth(320),
               alignment: Alignment.center,
@@ -35,6 +43,9 @@ class GoodsDetailBottomBar extends StatelessWidget {
             ),
           ),
           InkWell(
+            onTap: (){
+              Provide.value<GoodsDetailBottomBarProvide>(context).clear();
+            },
             child: Container(
               width: ScreenUtil().setWidth(320),
               alignment: Alignment.center,
