@@ -6,7 +6,7 @@ import './pages/index_page.dart';
 import './provide/child_category.dart';
 import './provide/category_goods_list.dart';
 import './provide/goods_detail_provide.dart';
-import './provide/goods_detail_bottom_bar_provide.dart';
+import './provide/cart_info_provide.dart';
 import './routers/staticize.dart';
 import './routers/routers.dart';
 
@@ -15,12 +15,12 @@ void main(){
   ChildCategory childCategory = ChildCategory();
   CategoryGoodsListProvide categoryGoodsListProvide = CategoryGoodsListProvide();
   GoodsDetailProvide goodsDetailProvide = GoodsDetailProvide();
-  GoodsDetailBottomBarProvide goodsDetailBottomBarProvide = GoodsDetailBottomBarProvide();
+  CartInfoProvide cartInfoProvide = CartInfoProvide();
   providers
     ..provide(Provider<ChildCategory>.value(childCategory))
     ..provide(Provider<CategoryGoodsListProvide>.value(categoryGoodsListProvide))
     ..provide(Provider<GoodsDetailProvide>.value(goodsDetailProvide))
-    ..provide(Provider<GoodsDetailBottomBarProvide>.value(goodsDetailBottomBarProvide));
+    ..provide(Provider<CartInfoProvide>.value(cartInfoProvide));
   runApp(ProviderNode(
     providers: providers,
     child: MyApp(),

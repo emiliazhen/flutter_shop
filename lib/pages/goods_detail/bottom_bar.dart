@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
 
-import '../../provide/goods_detail_bottom_bar_provide.dart';
+import '../../provide/cart_info_provide.dart';
 import '../../provide/goods_detail_provide.dart';
 
 class GoodsDetailBottomBar extends StatelessWidget {
@@ -27,7 +27,7 @@ class GoodsDetailBottomBar extends StatelessWidget {
           ),
           InkWell(
             onTap: (){
-              Provide.value<GoodsDetailBottomBarProvide>(context).add(goodsInfo.goodsId, goodsInfo.goodsName,goodsInfo.presentPrice, goodsInfo.image1);
+              Provide.value<CartInfoProvide>(context).addCart(goodsInfo.goodsId, goodsInfo.goodsName,goodsInfo.presentPrice, goodsInfo.image1);
             },
             child: Container(
               width: ScreenUtil().setWidth(320),
@@ -44,7 +44,7 @@ class GoodsDetailBottomBar extends StatelessWidget {
           ),
           InkWell(
             onTap: (){
-              Provide.value<GoodsDetailBottomBarProvide>(context).clear();
+              Provide.value<CartInfoProvide>(context).clearCart();
             },
             child: Container(
               width: ScreenUtil().setWidth(320),
