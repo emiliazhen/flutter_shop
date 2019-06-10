@@ -4,6 +4,7 @@ import 'package:provide/provide.dart';
 
 import '../provide/cart_info_provide.dart';
 import './cart_page/cart_item.dart';
+import './cart_page/cart_bottom.dart';
 
 class PageCart extends StatelessWidget {
   @override
@@ -17,11 +18,17 @@ class PageCart extends StatelessWidget {
         builder: (context,snapshot){
           if(snapshot.hasData){
             List cartList = Provide.value<CartInfoProvide>(context).cartList;
-            return ListView.builder(
-              itemCount: cartList.length,
-              itemBuilder: (context,index){
-                return CartItem(cartList[index]);
-              },
+            return Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView(
+                    children: cartList.map((item){
+                      return CartItem(item);
+                    }).toList(),
+                  ),
+                ),
+                CartBottom()
+              ],
             );
           }else{
             return Text('加载中...');
