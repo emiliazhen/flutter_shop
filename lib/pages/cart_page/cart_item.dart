@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../model/cart_info.dart';
+import './cart_counter.dart';
 
 class CartItem extends StatelessWidget {
   final CartInfoModel item;
@@ -73,7 +74,7 @@ class CartItem extends StatelessWidget {
               fontSize: ScreenUtil().setSp(28)
             ),
           ),
-          Text(item.count.toString())
+          CartCounter()
         ],
       ),
     );
