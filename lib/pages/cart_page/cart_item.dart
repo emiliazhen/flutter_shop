@@ -34,7 +34,7 @@ class CartItem extends StatelessWidget {
 
   Widget _cartItemCheckBox(CartInfoModel item){
     return Checkbox(
-      value: true,
+      value: item.checked,
       activeColor: Colors.pink,
       onChanged: (bool v){
 

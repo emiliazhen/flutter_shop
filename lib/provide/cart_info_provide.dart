@@ -40,6 +40,7 @@ class CartInfoProvide with ChangeNotifier {
         'count': 1,
         'price': price,
         'images': img,
+        'checked': true
       };
       tempList.add(newGoods);
       cartList.add(CartInfoModel.fromJson(newGoods));
