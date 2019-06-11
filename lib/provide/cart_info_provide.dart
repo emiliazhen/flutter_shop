@@ -50,6 +50,19 @@ class CartInfoProvide with ChangeNotifier {
     notifyListeners();
   }
 
+  deleteCartItem(String id) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    for (int i = 0; i < cartList.length; i++) {
+      if(cartList[i].goodsId == id){
+        cartList.removeAt(i);
+        break;
+      }
+    }
+    cartListString = json.encode(cartList).toString();
+    prefs.setString('cartInfo', cartListString);
+    await getCartInfo();
+  }
+
   clearCart()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('cartInfo');

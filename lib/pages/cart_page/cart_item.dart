@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provide/provide.dart';
 
 import '../../model/cart_info.dart';
 import './cart_counter.dart';
+import '../../provide/cart_info_provide.dart';
 
 class CartItem extends StatelessWidget {
   final CartInfoModel item;
@@ -26,7 +28,7 @@ class CartItem extends StatelessWidget {
           Expanded(
             child:  _cartItemName(item),
           ),
-          _cartItemPrice(item),
+          _cartItemPrice(context,item),
         ],
       ),
     );
@@ -80,7 +82,7 @@ class CartItem extends StatelessWidget {
     );
   }
   
-  Widget _cartItemPrice(CartInfoModel item){
+  Widget _cartItemPrice(BuildContext context,CartInfoModel item){
     return Container(
       width: ScreenUtil().setWidth(150),
       child: Column(
@@ -102,10 +104,15 @@ class CartItem extends StatelessWidget {
               decoration: TextDecoration.lineThrough
             ),
           ),
-          Icon(
-            Icons.delete_forever,
-            size: ScreenUtil().setWidth(35),
-            color: Colors.black26,
+          InkWell(
+            onTap: (){
+              Provide.value<CartInfoProvide>(context).deleteCartItem(item.goodsId);
+            },
+            child: Icon(
+              Icons.delete_forever,
+              size: ScreenUtil().setWidth(35),
+              color: Colors.black26,
+            ),
           )
         ],
       ),

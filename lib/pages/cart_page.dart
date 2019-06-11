@@ -17,15 +17,32 @@ class PageCart extends StatelessWidget {
         future: _getCartInfo(context),
         builder: (context,snapshot){
           if(snapshot.hasData){
-            List cartList = Provide.value<CartInfoProvide>(context).cartList;
             return Column(
               children: <Widget>[
                 Expanded(
-                  child: ListView(
-                    children: cartList.map((item){
-                      return CartItem(item);
-                    }).toList(),
-                  ),
+                  child: Provide<CartInfoProvide>(
+                    builder: (context,child,val){
+                      List cartList = val.cartList;
+                      if(cartList.length > 0){
+                        return ListView(
+                          children: cartList.map((item){
+                            return CartItem(item);
+                          }).toList(),
+                        );
+                      }else{
+                        return Container(
+                          padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                          child: Text(
+                            '购物车还是空的，赶紧去选购商品吧',
+                            style: TextStyle(
+                              fontSize: ScreenUtil().setSp(24),
+                              color:Colors.black26
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  )
                 ),
                 CartBottom()
               ],
