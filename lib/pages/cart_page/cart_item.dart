@@ -14,7 +14,7 @@ class CartItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(5), ScreenUtil().setHeight(10), ScreenUtil().setWidth(5), ScreenUtil().setHeight(10)),
-      height: ScreenUtil().setHeight(140),
+      height: ScreenUtil().setHeight(150),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
@@ -46,8 +46,8 @@ class CartItem extends StatelessWidget {
 
   Widget _cartItemImg(CartInfoModel item){
     return Container(
-      width: ScreenUtil().setWidth(120),
-      height: ScreenUtil().setWidth(120),
+      width: ScreenUtil().setWidth(130),
+      height: ScreenUtil().setWidth(130),
       decoration: BoxDecoration(
         border: Border.all(
           width: ScreenUtil().setWidth(2),

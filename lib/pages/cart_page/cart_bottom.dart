@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provide/provide.dart';
+
+import '../../provide/cart_info_provide.dart';
 
 class CartBottom extends StatelessWidget {
   @override
@@ -7,14 +10,18 @@ class CartBottom extends StatelessWidget {
     return Container(
       height: ScreenUtil().setHeight(85),
       color: Colors.white,
-      child: Row(
-        children: <Widget>[
-          _selectAllBtn(),
-          Expanded(
-            child: _priceTotal(),
-          ),
-          _buyChoosed()
-        ],
+      child: Provide<CartInfoProvide>(
+        builder: (context,child,val){
+          return Row(
+            children: <Widget>[
+              _selectAllBtn(),
+              Expanded(
+                child: _priceTotal(val.priceTotal),
+              ),
+              _buyChoosed(val.countTotal)
+            ],
+          );
+        },
       )
     );
   }
@@ -37,7 +44,7 @@ class CartBottom extends StatelessWidget {
     );
   }
 
-  Widget _priceTotal(){
+  Widget _priceTotal(double priceTotal){
     return Container(
       padding: EdgeInsets.all(ScreenUtil().setWidth(5)),
       child: Column(
@@ -60,7 +67,7 @@ class CartBottom extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text:'2453.00',
+                    text: priceTotal.toStringAsFixed(2),
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(34),
                       color: Colors.red
@@ -85,7 +92,7 @@ class CartBottom extends StatelessWidget {
     );
   }
 
-  Widget _buyChoosed(){
+  Widget _buyChoosed(int countTotal){
     return InkWell(
       onTap:(){},
       child: Container(
@@ -100,7 +107,7 @@ class CartBottom extends StatelessWidget {
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10))
         ),
         child: Text(
-          '结算(5)',
+          '结算($countTotal)',
           style: TextStyle(
             color: Colors.white
           ),

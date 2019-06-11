@@ -7,13 +7,21 @@ import '../model/cart_info.dart';
 class CartInfoProvide with ChangeNotifier {
   String cartListString = '[]';
   List<CartInfoModel> cartList = [];
+  double priceTotal = 0;
+  int countTotal = 0;
 
   getCartInfo() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     cartListString = prefs.get('cartInfo') ?? '[]';
     cartList = [];
+    priceTotal = 0;
+    countTotal = 0;
     (json.decode(cartListString.toString()) as List).cast().forEach((item){
       cartList.add(CartInfoModel.fromJson(item));
+      if(item['checked']){
+        priceTotal += item['price'];
+        countTotal += item['count'];
+      }
     });
     notifyListeners();
   }
@@ -60,7 +68,7 @@ class CartInfoProvide with ChangeNotifier {
     }
     cartListString = json.encode(cartList).toString();
     prefs.setString('cartInfo', cartListString);
-    notifyListeners();
+    await getCartInfo();
   }
 
   clearCart()async{
