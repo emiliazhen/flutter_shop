@@ -44,7 +44,7 @@ class _PageHomeState extends State<PageHome> with AutomaticKeepAliveClientMixin{
         children: hotGoodsList.map((item){
           return InkWell(
             onTap: (){
-              Staticize.router.navigateTo(context, '/goodDetail?id=${item['goodsId']}');
+              Staticize.router.navigateTo(context, '/goodsDetail?id=${item['goodsId']}');
             },
             child: Container(
               width: ScreenUtil().setWidth(369),
@@ -182,7 +182,7 @@ class SwiperDiy extends StatelessWidget {
         itemBuilder: (BuildContext context,int index){
           return InkWell(
             onTap: (){
-              Staticize.router.navigateTo(context, '/goodDetail?id=${swiperDataList[index]['goodsId']}');
+              Staticize.router.navigateTo(context, '/goodsDetail?id=${swiperDataList[index]['goodsId']}');
             },
             child: Image.network('${swiperDataList[index]['image']}',fit: BoxFit.fill),
           );
@@ -305,7 +305,7 @@ class Recommend extends StatelessWidget {
   Widget _item(index,BuildContext context){
     return InkWell(
       onTap: (){
-        Staticize.router.navigateTo(context, '/goodDetail?id=${recommendList[index]['goodsId']}');
+        Staticize.router.navigateTo(context, '/goodsDetail?id=${recommendList[index]['goodsId']}');
       },
       child: Container(
         height: ScreenUtil().setHeight(330),
@@ -417,7 +417,7 @@ class FloorGoods extends StatelessWidget {
       width: ScreenUtil().setWidth(375),
       child: InkWell(
         onTap: (){
-          Staticize.router.navigateTo(context, '/goodDetail?id=${goods['goodsId']}');
+          Staticize.router.navigateTo(context, '/goodsDetail?id=${goods['goodsId']}');
         },
         child: Image.network(goods['image']),
       ),

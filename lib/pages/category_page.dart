@@ -247,7 +247,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
       height: ScreenUtil().setHeight(200),
       child: InkWell(
         onTap: (){
-          Staticize.router.navigateTo(context, '/goodDetail?id=${newList[index].goodsId}');
+          Staticize.router.navigateTo(context, '/goodsDetail?id=${newList[index].goodsId}');
         },
         child: Container(
           decoration: BoxDecoration(

@@ -4,6 +4,7 @@ import 'package:provide/provide.dart';
 
 import '../../provide/cart_info_provide.dart';
 import '../../provide/goods_detail_provide.dart';
+import '../../routers/staticize.dart';
 
 class GoodsDetailBottomBar extends StatelessWidget {
   @override
@@ -16,6 +17,9 @@ class GoodsDetailBottomBar extends StatelessWidget {
       child: Row(
         children: <Widget>[
           InkWell(
+            onTap: (){
+              Staticize.router.navigateTo(context, '/cartPage');
+            },
             child:  Container(
               width: ScreenUtil().setWidth(110),
               child: Icon(
