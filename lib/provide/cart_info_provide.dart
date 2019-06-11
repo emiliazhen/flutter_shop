@@ -60,7 +60,7 @@ class CartInfoProvide with ChangeNotifier {
     }
     cartListString = json.encode(cartList).toString();
     prefs.setString('cartInfo', cartListString);
-    await getCartInfo();
+    notifyListeners();
   }
 
   clearCart()async{
