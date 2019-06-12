@@ -9,6 +9,7 @@ class CartInfoProvide with ChangeNotifier {
   List<CartInfoModel> cartList = [];
   double priceTotal = 0;
   int countTotal = 0;
+  bool allChecked = true;
 
   getCartInfo() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -16,11 +17,14 @@ class CartInfoProvide with ChangeNotifier {
     cartList = [];
     priceTotal = 0;
     countTotal = 0;
+    allChecked = true;
     (json.decode(cartListString.toString()) as List).cast().forEach((item){
       cartList.add(CartInfoModel.fromJson(item));
       if(item['checked']){
         priceTotal += item['price'];
         countTotal += item['count'];
+      }else{
+        allChecked = false;
       }
     });
     notifyListeners();
@@ -60,20 +64,39 @@ class CartInfoProvide with ChangeNotifier {
 
   deleteCartItem(String id) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    for (int i = 0; i < cartList.length; i++) {
-      if(cartList[i].goodsId == id){
-        cartList.removeAt(i);
-        break;
-      }
-    }
+    cartList.removeWhere((item) => item.goodsId == id);
     cartListString = json.encode(cartList).toString();
     prefs.setString('cartInfo', cartListString);
     await getCartInfo();
   }
 
-  clearCart()async{
+  clearCart() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('cartInfo');
     notifyListeners();
+  }
+
+  changeCartItemCheck(String id,bool checked) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int tmpIndex = cartList.indexWhere((item) => item.goodsId == id);
+    cartList[tmpIndex].checked = checked;
+    cartListString = json.encode(cartList).toString();
+    prefs.setString('cartInfo', cartListString);
+    await getCartInfo();
+  }
+
+  changeCartAllCheck(bool checked) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cartListString=prefs.getString('cartInfo'); 
+    List<Map> tempList= (json.decode(cartListString.toString()) as List).cast(); 
+    List<Map> newList=[]; //新建一个List，用于组成新的持久化数据。
+    for(var item in tempList ){
+      var newItem = item; //复制新的变量，因为Dart不让循环时修改原值
+      newItem['checked']=checked; //改变选中状态
+      newList.add(newItem);
+    }
+    cartListString = json.encode(newList).toString();
+    prefs.setString('cartInfo', cartListString);
+    await getCartInfo();
   }
 }

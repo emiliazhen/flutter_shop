@@ -23,7 +23,7 @@ class CartItem extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          _cartItemCheckBox(item),
+          _cartItemCheckBox(context,item),
           _cartItemImg(item),
           Expanded(
             child:  _cartItemName(item),
@@ -34,12 +34,13 @@ class CartItem extends StatelessWidget {
     );
   }
 
-  Widget _cartItemCheckBox(CartInfoModel item){
+  Widget _cartItemCheckBox(BuildContext context,CartInfoModel item){
     return Checkbox(
       value: item.checked,
       activeColor: Colors.pink,
       onChanged: (bool v){
-
+        item.checked = v;
+        Provide.value<CartInfoProvide>(context).changeCartItemCheck(item.goodsId, item.checked);
       },
     );
   }
