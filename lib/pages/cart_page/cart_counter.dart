@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provide/provide.dart';
+
+import '../../provide/cart_info_provide.dart';
+import '../../model/cart_info.dart';
 
 class CartCounter extends StatelessWidget {
+  final CartInfoModel item;
+  CartCounter(this.item);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,19 +22,21 @@ class CartCounter extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          _minusBtn(),
+          _minusBtn(context),
           Expanded(
             child: _countShow(),
           ),
-          _addBtn()
+          _addBtn(context)
         ],
       ),
     );
   }
 
-  Widget _minusBtn(){
+  Widget _minusBtn(BuildContext context){
     return InkWell(
-      onTap:(){},
+      onTap:(){
+        Provide.value<CartInfoProvide>(context).cartItemCountReduce(item.goodsId, context);
+      },
       child: Container(
         width: ScreenUtil().setWidth(45),
         height: ScreenUtil().setHeight(45),
@@ -58,13 +66,15 @@ class CartCounter extends StatelessWidget {
         )
       ),
       alignment: Alignment.center,
-      child: Text('1'),
+      child: Text('${item.count}'),
     );
   }
 
-  Widget _addBtn(){
+  Widget _addBtn(BuildContext context){
     return InkWell(
-      onTap: (){},
+      onTap: (){
+        Provide.value<CartInfoProvide>(context).cartItemCountAdd(item.goodsId, context);
+      },
       child: Container(
         width: ScreenUtil().setWidth(45),
         height: ScreenUtil().setHeight(45),

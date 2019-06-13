@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:toast/toast.dart';
 
 import '../model/cart_info.dart';
 
@@ -21,7 +22,7 @@ class CartInfoProvide with ChangeNotifier {
     (json.decode(cartListString.toString()) as List).cast().forEach((item){
       cartList.add(CartInfoModel.fromJson(item));
       if(item['checked']){
-        priceTotal += item['price'];
+        priceTotal += item['price'] * item['count'];
         countTotal += item['count'];
       }else{
         allChecked = false;
@@ -96,6 +97,32 @@ class CartInfoProvide with ChangeNotifier {
       newList.add(newItem);
     }
     cartListString = json.encode(newList).toString();
+    prefs.setString('cartInfo', cartListString);
+    await getCartInfo();
+  }
+
+  cartItemCountAdd(String id,BuildContext context) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int tmpIndex = cartList.indexWhere((item) => item.goodsId == id);
+    if(cartList[tmpIndex].count >= 99){
+        Toast.show('该商品不能购买更多了',context,duration:Toast.LENGTH_SHORT,gravity:Toast.CENTER);
+    }else{
+      cartList[tmpIndex].count++;
+    }
+    cartListString = json.encode(cartList).toString();
+    prefs.setString('cartInfo', cartListString);
+    await getCartInfo();
+  }
+
+  cartItemCountReduce(String id,BuildContext context) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int tmpIndex = cartList.indexWhere((item) => item.goodsId == id);
+    if(cartList[tmpIndex].count == 1){
+        Toast.show('该商品不能再减少了',context,duration:Toast.LENGTH_SHORT,gravity:Toast.CENTER);
+    }else{
+      cartList[tmpIndex].count--;
+    }
+    cartListString = json.encode(cartList).toString();
     prefs.setString('cartInfo', cartListString);
     await getCartInfo();
   }

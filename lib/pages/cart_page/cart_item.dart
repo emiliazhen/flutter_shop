@@ -77,7 +77,7 @@ class CartItem extends StatelessWidget {
               fontSize: ScreenUtil().setSp(28)
             ),
           ),
-          CartCounter()
+          CartCounter(item)
         ],
       ),
     );
