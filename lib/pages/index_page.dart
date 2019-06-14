@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provide/provide.dart';
 
 import './home_page.dart';
 import './category_page.dart';
 import './cart_page.dart';
 import './member_page.dart';
+import '../provide/page_provide.dart';
 
-class IndexPage extends StatefulWidget {
-  @override
-  _IndexPageState createState() => _IndexPageState();
-}
-
-class _IndexPageState extends State<IndexPage> {
+class IndexPage extends StatelessWidget {
   final List<BottomNavigationBarItem> bottomTabs = [
     BottomNavigationBarItem(
       icon: Icon(CupertinoIcons.home),
@@ -37,32 +34,30 @@ class _IndexPageState extends State<IndexPage> {
     PageCart(),
     PageMember()
   ];
-  int currentIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
-    return Scaffold(
-      backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: currentIndex,
-        items:bottomTabs,
-        onTap: (index){
-          setState(() {
-           currentIndex = index; 
-          });
-        },
-      ),
-      body: IndexedStack(
-        index: currentIndex,
-        children: pages,
-      )
+    return Provide<PageProvide>(
+      builder: (context,child,val){
+        int currentIndex = Provide.value<PageProvide>(context).currentIndex;
+        return Scaffold(
+          backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            currentIndex: currentIndex,
+            items:bottomTabs,
+            onTap: (index){
+              print('>>>>$index');
+              Provide.value<PageProvide>(context).changeIndex(index);
+            },
+          ),
+          body: IndexedStack(
+            index: currentIndex,
+            children: pages,
+          )
+        );
+      }
     );
   }
 }

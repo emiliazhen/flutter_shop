@@ -4,7 +4,7 @@ import 'package:provide/provide.dart';
 
 import '../../provide/cart_info_provide.dart';
 import '../../provide/goods_detail_provide.dart';
-import '../../routers/staticize.dart';
+import '../../provide/page_provide.dart';
 
 class GoodsDetailBottomBar extends StatelessWidget {
   @override
@@ -18,14 +18,15 @@ class GoodsDetailBottomBar extends StatelessWidget {
         children: <Widget>[
           InkWell(
             onTap: (){
-              Staticize.router.navigateTo(context, '/cartPage');
+              Provide.value<PageProvide>(context).changeIndex(2);
+              Navigator.pop(context);
             },
             child:  Container(
               width: ScreenUtil().setWidth(110),
               child: Icon(
                 Icons.shopping_cart,
                 size: ScreenUtil().setSp(45),
-                color: Colors.black12,
+                color: Colors.red,
               ),
             ),
           ),
