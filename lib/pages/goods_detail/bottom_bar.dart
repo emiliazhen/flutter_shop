@@ -21,13 +21,47 @@ class GoodsDetailBottomBar extends StatelessWidget {
               Provide.value<PageProvide>(context).changeIndex(2);
               Navigator.pop(context);
             },
-            child:  Container(
-              width: ScreenUtil().setWidth(110),
-              child: Icon(
-                Icons.shopping_cart,
-                size: ScreenUtil().setSp(45),
-                color: Colors.red,
-              ),
+            child:  Stack(
+              children: <Widget>[
+                Container(
+                  width: ScreenUtil().setWidth(110),
+                  child: Icon(
+                    Icons.shopping_cart,
+                    size: ScreenUtil().setSp(50),
+                    color: Colors.black45,
+                  ),
+                ),
+                Provide<CartInfoProvide>(
+                  builder: (context,child,val){
+                    int countTotal = val.countTotal;
+                    return Positioned(
+                      top: 0,
+                      right:10,
+                      child: Offstage(
+                        offstage: countTotal == 0,
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(5), ScreenUtil().setHeight(2), ScreenUtil().setWidth(5), ScreenUtil().setHeight(2)),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            border: Border.all(
+                              width: ScreenUtil().setWidth(2),
+                              color: Colors.white
+                            ),
+                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20))
+                          ),
+                          child: Text(
+                            '${countTotal > 99 ? '99+' : countTotal}',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: ScreenUtil().setSp(20)
+                            ),
+                          ),
+                        ),
+                      )
+                    );
+                  },
+                )
+              ],
             ),
           ),
           InkWell(

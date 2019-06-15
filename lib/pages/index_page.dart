@@ -48,7 +48,6 @@ class IndexPage extends StatelessWidget {
             currentIndex: currentIndex,
             items:bottomTabs,
             onTap: (index){
-              print('>>>>$index');
               Provide.value<PageProvide>(context).changeIndex(index);
             },
           ),
