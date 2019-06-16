@@ -34,16 +34,14 @@ class CartInfoProvide with ChangeNotifier {
   addCart(id,name,price,img) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     cartListString = prefs.get('cartInfo') ?? '[]';
-    dynamic temp = cartListString==null ? [] : json.decode(cartListString.toString());
-    List<Map> tempList = (temp as List).cast();
+    List<Map> tempList = (cartListString==null ? [] : json.decode(cartListString.toString()) as List).cast();
     bool isHave = false;
     int arrIndex = 0;
     priceTotal = 0;
     countTotal = 0;
     tempList.forEach((item){
       if(item['goodsId'] == id){
-        tempList[arrIndex]['count'] = item['count']+1;
-        cartList[arrIndex].count++;
+        item['count'] += 1;
         isHave = true;
       }
       if(item['checked']){
@@ -100,14 +98,10 @@ class CartInfoProvide with ChangeNotifier {
   changeCartAllCheck(bool checked) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     cartListString=prefs.getString('cartInfo'); 
-    List<Map> tempList= (json.decode(cartListString.toString()) as List).cast(); 
-    List<Map> newList=[]; //新建一个List，用于组成新的持久化数据。
-    for(var item in tempList ){
-      var newItem = item; //复制新的变量，因为Dart不让循环时修改原值
-      newItem['checked']=checked; //改变选中状态
-      newList.add(newItem);
-    }
-    cartListString = json.encode(newList).toString();
+    cartList.forEach((item){
+      item.checked = checked;
+    });
+    cartListString = json.encode(cartList).toString();
     prefs.setString('cartInfo', cartListString);
     await getCartInfo();
   }

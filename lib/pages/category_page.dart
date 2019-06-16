@@ -149,7 +149,9 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
     request('getMallGoods', data).then((res) {
       dynamic data = json.decode(res.toString());
       CategoryGoodsListModel goodslist = CategoryGoodsListModel.fromJson(data);
-      Provide.value<CategoryGoodsListProvide>(context).getGoodsList(goodslist.data == null ? [] : goodslist.data);
+      if(goodslist.data != null){
+        Provide.value<CategoryGoodsListProvide>(context).getGoodsList(goodslist.data);
+      }
     });
   }
 

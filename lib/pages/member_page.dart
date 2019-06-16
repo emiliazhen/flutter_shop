@@ -107,9 +107,15 @@ class PageMember extends StatelessWidget {
               children: <Widget>[
                 Icon(
                   Icons.party_mode,
-                  size:ScreenUtil().setSp(30)
+                  size:ScreenUtil().setSp(40),
+                  color: Colors.red,
                 ),
-                Text('待付款')
+                Text(
+                  '待付款',
+                  style: TextStyle(
+                    color: Colors.black54
+                  ),
+                )
               ],
             )
           ),
@@ -118,9 +124,15 @@ class PageMember extends StatelessWidget {
               children: <Widget>[
                 Icon(
                   Icons.query_builder,
-                  size:ScreenUtil().setSp(30)
+                  size:ScreenUtil().setSp(40),
+                  color: Colors.red,
                 ),
-                Text('待发货')
+                Text(
+                  '待发货',
+                  style: TextStyle(
+                    color: Colors.black54
+                  ),
+                )
               ],
             ),
           ),
@@ -129,9 +141,15 @@ class PageMember extends StatelessWidget {
               children: <Widget>[
                 Icon(
                   Icons.directions_car,
-                  size:ScreenUtil().setSp(30)
+                  size:ScreenUtil().setSp(40),
+                  color: Colors.red,
                 ),
-                Text('待收货')
+                Text(
+                  '待收货',
+                  style: TextStyle(
+                    color: Colors.black54
+                  ),
+                )
               ],
             ),
           ),
@@ -140,9 +158,15 @@ class PageMember extends StatelessWidget {
               children: <Widget>[
                 Icon(
                   Icons.content_paste,
-                  size:ScreenUtil().setSp(30)
+                  size:ScreenUtil().setSp(40),
+                  color: Colors.red,
                 ),
-                Text('待评价')
+                Text(
+                  '待评价',
+                  style: TextStyle(
+                    color: Colors.black54
+                  ),
+                )
               ],
             ),
           )
