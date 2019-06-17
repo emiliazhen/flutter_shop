@@ -42,6 +42,7 @@ class CartInfoProvide with ChangeNotifier {
     tempList.forEach((item){
       if(item['goodsId'] == id){
         item['count'] += 1;
+        cartList[arrIndex].count += 1;
         isHave = true;
       }
       if(item['checked']){

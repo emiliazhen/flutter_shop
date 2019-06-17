@@ -12,6 +12,31 @@ class PageCart extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('购物车'),
+        actions: <Widget>[
+          InkWell(
+            onTap: (){
+              Provide.value<CartInfoProvide>(context).clearCart();
+            },
+            child: Container(
+              padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.remove_shopping_cart,
+                    size: ScreenUtil().setSp(45),
+                  ),
+                  Text(
+                    '删除所有',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setWidth(22)
+                    ),
+                  )
+                ],
+              ),
+            )
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: _getCartInfo(context),
