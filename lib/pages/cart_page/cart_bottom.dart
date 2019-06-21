@@ -87,7 +87,7 @@ class CartBottom extends StatelessWidget {
           Container(
             alignment: Alignment.centerRight,
             child: Text(
-              '满10元免配送费，预购免配送费',
+              priceTotal < 10 ? '满10元免配送费，预购免配送费' : '已免配送费',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(22),
                 color: Colors.black38

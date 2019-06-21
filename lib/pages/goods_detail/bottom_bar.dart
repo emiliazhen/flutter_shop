@@ -83,7 +83,6 @@ class GoodsDetailBottomBar extends StatelessWidget {
           ),
           InkWell(
             onTap: (){
-              Provide.value<CartInfoProvide>(context).clearCart();
             },
             child: Container(
               width: ScreenUtil().setWidth(320),
