@@ -8,4 +8,4 @@ A new Flutter project.
 fultter run
 
 ## Show
-!(flutter_shop_show)[/flutter_shop_show.gif]
+![flutter_shop_show](/flutter_shop_show.gif)
