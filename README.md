@@ -8,13 +8,13 @@ A new Flutter project.
 fultter run
 
 ## Show
-!(flutter_shop_home)[/flutter_shop_home.gif]   
+![home](/flutter_shop_home.gif)   
 首页  
-!(flutter_shop_category)[/flutter_shop_category.gif]   
+![category](/flutter_shop_category.gif)   
 分类页面   
-!(flutter_shop_cate_detail)[/flutter_shop_cate_detail.gif]   
+![detail](/flutter_shop_cate_detail.gif)   
 商品详情   
-!(flutter_shop_cart)[/flutter_shop_cart.gif]   
+![cart](/flutter_shop_cart.gif)   
 购物车   
-!(flutter_shop_user)[/flutter_shop_user.gif]   
+![user](/flutter_shop_user.gif)   
 我的   
